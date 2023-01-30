@@ -13,6 +13,17 @@ namespace StudentAdminPortal.API
 
             // Add services to the container.
 
+            builder.Services.AddCors((options) =>
+            {
+                options.AddPolicy("angularApplication", (builder) =>
+                {
+                    builder.WithOrigins("http://localhost:4200")
+                    .AllowAnyHeader()
+                    .WithMethods("GET", "POST", "PUT", "DELETE")
+                    .WithExposedHeaders("*");
+                });
+            });
+
             builder.Services.AddControllers();
 
             var connectionString = builder.Configuration.GetConnectionString("StudentAdminPortalDb");
@@ -38,8 +49,9 @@ namespace StudentAdminPortal.API
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            app.UseCors("angularApplication");
 
+            app.UseAuthorization();
 
             app.MapControllers();
 
