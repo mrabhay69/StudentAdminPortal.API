@@ -1,4 +1,5 @@
 
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using StudentAdminPortal.API.DataModels;
@@ -8,6 +9,7 @@ namespace StudentAdminPortal.API
 {
     public class Program
     {
+        [Obsolete]
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +28,8 @@ namespace StudentAdminPortal.API
             });
 
             builder.Services.AddControllers();
+
+            builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Program>());
 
             var connectionString = builder.Configuration.GetConnectionString("StudentAdminPortalDb");
             builder.Services.AddDbContext<StudentAdminContext>(options =>
